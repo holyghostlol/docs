@@ -4,7 +4,6 @@
   "name": "Fragment API",
   "openapi": ["/openapi.json"],
   "api": {
-    "baseUrl": "https://fragment-api.up.railway.app",
     "playground": {
       "mode": "simple"
     }
