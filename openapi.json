@@ -1,1 +1,507 @@
-{"openapi":"3.1.0","info":{"title":"Fragment API","summary":"Fragment HTTP and Webhooks API","description":"Read the docs at https://bbt17.mintlify.app/api-reference","version":"0.1.2"},"servers":[{"url":"https://fragment-api.up.railway.app","description":"Production environment"}],"paths":{"/v1/users/me":{"get":{"tags":["Users","documented"],"summary":"Get Api User Me","operationId":"Users:get_api_user_me","responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/UserRead"}}}}},"security":[{"API Token":[]}]}},"/v1/stars/buy":{"post":{"tags":["Stars","documented"],"summary":"Buy Stars","description":"Buy stars for a user. Takes user username and stars quantity","operationId":"Stars:buy_stars","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/BuyStars"}}},"required":true},"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/BuyStarsResponse"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}},"security":[{"API Token":[]}]}},"/v1/stars/recipient/{username}":{"get":{"tags":["Stars","documented"],"summary":"Get Recipient","description":"Get stars recipient","operationId":"Stars:get_recipient","security":[{"API Token":[]}],"parameters":[{"name":"username","in":"path","required":true,"schema":{"type":"string","title":"Username"}}],"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/StarsRecipient"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/v1/premium/buy":{"post":{"tags":["Premium","documented"],"summary":"Buy Premium","description":"Buy premium subscription for a user. Takes user username and premium months","operationId":"Premium:buy_premium","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/BuyPremium"}}},"required":true},"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/BuyPremiumResponse"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}},"security":[{"API Token":[]}]}},"/v1/premium/recipient/{username}":{"get":{"tags":["Premium","documented"],"summary":"Get Recipient","description":"Get premium recipient","operationId":"Premium:get_recipient","security":[{"API Token":[]}],"parameters":[{"name":"username","in":"path","required":true,"schema":{"type":"string","title":"Username"}}],"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/PremiumRecipient"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}}},"components":{"schemas":{"BuyPremium":{"properties":{"username":{"type":"string","title":"Username"},"months":{"$ref":"#/components/schemas/PremiumMonths"},"show_sender":{"type":"boolean","title":"Show Sender","default":false}},"type":"object","required":["username","months"],"title":"BuyPremium"},"BuyPremiumResponse":{"properties":{"success":{"type":"boolean","title":"Success"},"transaction_hash":{"type":"string","title":"Transaction Hash"}},"type":"object","required":["success","transaction_hash"],"title":"BuyPremiumResponse"},"BuyStars":{"properties":{"quantity":{"type":"integer","title":"Quantity"},"username":{"type":"string","title":"Username"},"show_sender":{"type":"boolean","title":"Show Sender","default":false}},"type":"object","required":["quantity","username"],"title":"BuyStars"},"BuyStarsResponse":{"properties":{"success":{"type":"boolean","title":"Success"},"transaction_hash":{"type":"string","title":"Transaction Hash"}},"type":"object","required":["success","transaction_hash"],"title":"BuyStarsResponse"},"HTTPValidationError":{"properties":{"detail":{"items":{"$ref":"#/components/schemas/ValidationError"},"type":"array","title":"Detail"}},"type":"object","title":"HTTPValidationError"},"PremiumMonths":{"type":"string","enum":["3","6","12"],"title":"PremiumMonths"},"PremiumRecipient":{"properties":{"recipient":{"type":"string","title":"Recipient"},"photo":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Photo"},"name":{"type":"string","title":"Name"}},"type":"object","required":["recipient","photo","name"],"title":"PremiumRecipient"},"StarsRecipient":{"properties":{"recipient":{"type":"string","title":"Recipient"},"photo":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Photo"},"name":{"type":"string","title":"Name"}},"type":"object","required":["recipient","photo","name"],"title":"StarsRecipient"},"UserRead":{"properties":{"first_name":{"type":"string","title":"First Name"},"last_name":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Last Name"},"username":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Username"},"balance":{"type":"number","title":"Balance"}},"type":"object","required":["first_name","last_name","username","balance"],"title":"UserRead"},"ValidationError":{"properties":{"loc":{"items":{"anyOf":[{"type":"string"},{"type":"integer"}]},"type":"array","title":"Location"},"msg":{"type":"string","title":"Message"},"type":{"type":"string","title":"Error Type"}},"type":"object","required":["loc","msg","type"],"title":"ValidationError"}},"securitySchemes":{"API Token":{"type":"http","description":"API Token from your panel","scheme":"bearer"}}},"tags":[{"name":"private","description":"Endpoints that should appear in the schema only in development to generate our internal panel."},{"name":"documented","description":"Endpoints shown and documented in the Fragment API documentation."}]}
+{
+    "openapi":  "3.1.0",
+    "info":  {
+                 "title":  "Fragment API",
+                 "summary":  "Fragment HTTP and Webhooks API",
+                 "description":  "Read the docs at https://bbt17.mintlify.app/api-reference",
+                 "version":  "0.1.1"
+             },
+    "servers":  [
+                    {
+                        "url":  "https://fragment-api.up.railway.app",
+                        "description":  "Production environment"
+                    }
+                ],
+    "paths":  {
+                  "/v1/users/me":  {
+                                       "get":  {
+                                                   "tags":  [
+                                                                "Users",
+                                                                "documented"
+                                                            ],
+                                                   "summary":  "Get Api User Me",
+                                                   "operationId":  "Users:get_api_user_me",
+                                                   "responses":  {
+                                                                     "200":  {
+                                                                                 "description":  "Successful Response",
+                                                                                 "content":  {
+                                                                                                 "application/json":  {
+                                                                                                                          "schema":  {
+                                                                                                                                         "$ref":  "#/components/schemas/UserRead"
+                                                                                                                                     }
+                                                                                                                      }
+                                                                                             }
+                                                                             }
+                                                                 },
+                                                   "security":  [
+                                                                    {
+                                                                        "API Token":  [
+
+                                                                                      ]
+                                                                    }
+                                                                ]
+                                               }
+                                   },
+                  "/v1/stars/buy":  {
+                                        "post":  {
+                                                     "tags":  [
+                                                                  "Stars",
+                                                                  "documented"
+                                                              ],
+                                                     "summary":  "Buy Stars",
+                                                     "description":  "Buy stars for a user. Takes user username and stars quantity",
+                                                     "operationId":  "Stars:buy_stars",
+                                                     "requestBody":  {
+                                                                         "content":  {
+                                                                                         "application/json":  {
+                                                                                                                  "schema":  {
+                                                                                                                                 "$ref":  "#/components/schemas/BuyStars"
+                                                                                                                             }
+                                                                                                              }
+                                                                                     },
+                                                                         "required":  true
+                                                                     },
+                                                     "responses":  {
+                                                                       "200":  {
+                                                                                   "description":  "Successful Response",
+                                                                                   "content":  {
+                                                                                                   "application/json":  {
+                                                                                                                            "schema":  {
+                                                                                                                                           "$ref":  "#/components/schemas/BuyStarsResponse"
+                                                                                                                                       }
+                                                                                                                        }
+                                                                                               }
+                                                                               },
+                                                                       "422":  {
+                                                                                   "description":  "Validation Error",
+                                                                                   "content":  {
+                                                                                                   "application/json":  {
+                                                                                                                            "schema":  {
+                                                                                                                                           "$ref":  "#/components/schemas/HTTPValidationError"
+                                                                                                                                       }
+                                                                                                                        }
+                                                                                               }
+                                                                               }
+                                                                   },
+                                                     "security":  [
+                                                                      {
+                                                                          "API Token":  [
+
+                                                                                        ]
+                                                                      }
+                                                                  ]
+                                                 }
+                                    },
+                  "/v1/stars/recipient/{username}":  {
+                                                         "get":  {
+                                                                     "tags":  [
+                                                                                  "Stars",
+                                                                                  "documented"
+                                                                              ],
+                                                                     "summary":  "Get Recipient",
+                                                                     "description":  "Get stars recipient",
+                                                                     "operationId":  "Stars:get_recipient",
+                                                                     "security":  [
+                                                                                      {
+                                                                                          "API Token":  [
+
+                                                                                                        ]
+                                                                                      }
+                                                                                  ],
+                                                                     "parameters":  [
+                                                                                        {
+                                                                                            "name":  "username",
+                                                                                            "in":  "path",
+                                                                                            "required":  true,
+                                                                                            "schema":  {
+                                                                                                           "type":  "string",
+                                                                                                           "title":  "Username"
+                                                                                                       }
+                                                                                        }
+                                                                                    ],
+                                                                     "responses":  {
+                                                                                       "200":  {
+                                                                                                   "description":  "Successful Response",
+                                                                                                   "content":  {
+                                                                                                                   "application/json":  {
+                                                                                                                                            "schema":  {
+                                                                                                                                                           "$ref":  "#/components/schemas/StarsRecipient"
+                                                                                                                                                       }
+                                                                                                                                        }
+                                                                                                               }
+                                                                                               },
+                                                                                       "422":  {
+                                                                                                   "description":  "Validation Error",
+                                                                                                   "content":  {
+                                                                                                                   "application/json":  {
+                                                                                                                                            "schema":  {
+                                                                                                                                                           "$ref":  "#/components/schemas/HTTPValidationError"
+                                                                                                                                                       }
+                                                                                                                                        }
+                                                                                                               }
+                                                                                               }
+                                                                                   }
+                                                                 }
+                                                     },
+                  "/v1/premium/buy":  {
+                                          "post":  {
+                                                       "tags":  [
+                                                                    "Premium",
+                                                                    "documented"
+                                                                ],
+                                                       "summary":  "Buy Premium",
+                                                       "description":  "Buy premium subscription for a user. Takes user username and premium months",
+                                                       "operationId":  "Premium:buy_premium",
+                                                       "requestBody":  {
+                                                                           "content":  {
+                                                                                           "application/json":  {
+                                                                                                                    "schema":  {
+                                                                                                                                   "$ref":  "#/components/schemas/BuyPremium"
+                                                                                                                               }
+                                                                                                                }
+                                                                                       },
+                                                                           "required":  true
+                                                                       },
+                                                       "responses":  {
+                                                                         "200":  {
+                                                                                     "description":  "Successful Response",
+                                                                                     "content":  {
+                                                                                                     "application/json":  {
+                                                                                                                              "schema":  {
+                                                                                                                                             "$ref":  "#/components/schemas/BuyPremiumResponse"
+                                                                                                                                         }
+                                                                                                                          }
+                                                                                                 }
+                                                                                 },
+                                                                         "422":  {
+                                                                                     "description":  "Validation Error",
+                                                                                     "content":  {
+                                                                                                     "application/json":  {
+                                                                                                                              "schema":  {
+                                                                                                                                             "$ref":  "#/components/schemas/HTTPValidationError"
+                                                                                                                                         }
+                                                                                                                          }
+                                                                                                 }
+                                                                                 }
+                                                                     },
+                                                       "security":  [
+                                                                        {
+                                                                            "API Token":  [
+
+                                                                                          ]
+                                                                        }
+                                                                    ]
+                                                   }
+                                      },
+                  "/v1/premium/recipient/{username}":  {
+                                                           "get":  {
+                                                                       "tags":  [
+                                                                                    "Premium",
+                                                                                    "documented"
+                                                                                ],
+                                                                       "summary":  "Get Recipient",
+                                                                       "description":  "Get premium recipient",
+                                                                       "operationId":  "Premium:get_recipient",
+                                                                       "security":  [
+                                                                                        {
+                                                                                            "API Token":  [
+
+                                                                                                          ]
+                                                                                        }
+                                                                                    ],
+                                                                       "parameters":  [
+                                                                                          {
+                                                                                              "name":  "username",
+                                                                                              "in":  "path",
+                                                                                              "required":  true,
+                                                                                              "schema":  {
+                                                                                                             "type":  "string",
+                                                                                                             "title":  "Username"
+                                                                                                         }
+                                                                                          }
+                                                                                      ],
+                                                                       "responses":  {
+                                                                                         "200":  {
+                                                                                                     "description":  "Successful Response",
+                                                                                                     "content":  {
+                                                                                                                     "application/json":  {
+                                                                                                                                              "schema":  {
+                                                                                                                                                             "$ref":  "#/components/schemas/PremiumRecipient"
+                                                                                                                                                         }
+                                                                                                                                          }
+                                                                                                                 }
+                                                                                                 },
+                                                                                         "422":  {
+                                                                                                     "description":  "Validation Error",
+                                                                                                     "content":  {
+                                                                                                                     "application/json":  {
+                                                                                                                                              "schema":  {
+                                                                                                                                                             "$ref":  "#/components/schemas/HTTPValidationError"
+                                                                                                                                                         }
+                                                                                                                                          }
+                                                                                                                 }
+                                                                                                 }
+                                                                                     }
+                                                                   }
+                                                       }
+              },
+    "components":  {
+                       "schemas":  {
+                                       "BuyPremium":  {
+                                                          "properties":  {
+                                                                             "username":  {
+                                                                                              "type":  "string",
+                                                                                              "title":  "Username"
+                                                                                          },
+                                                                             "months":  {
+                                                                                            "$ref":  "#/components/schemas/PremiumMonths"
+                                                                                        },
+                                                                             "show_sender":  {
+                                                                                                 "type":  "boolean",
+                                                                                                 "title":  "Show Sender",
+                                                                                                 "default":  false
+                                                                                             }
+                                                                         },
+                                                          "type":  "object",
+                                                          "required":  [
+                                                                           "username",
+                                                                           "months"
+                                                                       ],
+                                                          "title":  "BuyPremium"
+                                                      },
+                                       "BuyPremiumResponse":  {
+                                                                  "properties":  {
+                                                                                     "success":  {
+                                                                                                     "type":  "boolean",
+                                                                                                     "title":  "Success"
+                                                                                                 },
+                                                                                     "transaction_hash":  {
+                                                                                                              "type":  "string",
+                                                                                                              "title":  "Transaction Hash"
+                                                                                                          }
+                                                                                 },
+                                                                  "type":  "object",
+                                                                  "required":  [
+                                                                                   "success",
+                                                                                   "transaction_hash"
+                                                                               ],
+                                                                  "title":  "BuyPremiumResponse"
+                                                              },
+                                       "BuyStars":  {
+                                                        "properties":  {
+                                                                           "quantity":  {
+                                                                                            "type":  "integer",
+                                                                                            "title":  "Quantity"
+                                                                                        },
+                                                                           "username":  {
+                                                                                            "type":  "string",
+                                                                                            "title":  "Username"
+                                                                                        },
+                                                                           "show_sender":  {
+                                                                                               "type":  "boolean",
+                                                                                               "title":  "Show Sender",
+                                                                                               "default":  false
+                                                                                           }
+                                                                       },
+                                                        "type":  "object",
+                                                        "required":  [
+                                                                         "quantity",
+                                                                         "username"
+                                                                     ],
+                                                        "title":  "BuyStars"
+                                                    },
+                                       "BuyStarsResponse":  {
+                                                                "properties":  {
+                                                                                   "success":  {
+                                                                                                   "type":  "boolean",
+                                                                                                   "title":  "Success"
+                                                                                               },
+                                                                                   "transaction_hash":  {
+                                                                                                            "type":  "string",
+                                                                                                            "title":  "Transaction Hash"
+                                                                                                        }
+                                                                               },
+                                                                "type":  "object",
+                                                                "required":  [
+                                                                                 "success",
+                                                                                 "transaction_hash"
+                                                                             ],
+                                                                "title":  "BuyStarsResponse"
+                                                            },
+                                       "HTTPValidationError":  {
+                                                                   "properties":  {
+                                                                                      "detail":  {
+                                                                                                     "items":  {
+                                                                                                                   "$ref":  "#/components/schemas/ValidationError"
+                                                                                                               },
+                                                                                                     "type":  "array",
+                                                                                                     "title":  "Detail"
+                                                                                                 }
+                                                                                  },
+                                                                   "type":  "object",
+                                                                   "title":  "HTTPValidationError"
+                                                               },
+                                       "PremiumMonths":  {
+                                                             "type":  "string",
+                                                             "enum":  [
+                                                                          "3",
+                                                                          "6",
+                                                                          "12"
+                                                                      ],
+                                                             "title":  "PremiumMonths"
+                                                         },
+                                       "PremiumRecipient":  {
+                                                                "properties":  {
+                                                                                   "recipient":  {
+                                                                                                     "type":  "string",
+                                                                                                     "title":  "Recipient"
+                                                                                                 },
+                                                                                   "photo":  {
+                                                                                                 "anyOf":  [
+                                                                                                               {
+                                                                                                                   "type":  "string"
+                                                                                                               },
+                                                                                                               {
+                                                                                                                   "type":  "null"
+                                                                                                               }
+                                                                                                           ],
+                                                                                                 "title":  "Photo"
+                                                                                             },
+                                                                                   "name":  {
+                                                                                                "type":  "string",
+                                                                                                "title":  "Name"
+                                                                                            }
+                                                                               },
+                                                                "type":  "object",
+                                                                "required":  [
+                                                                                 "recipient",
+                                                                                 "photo",
+                                                                                 "name"
+                                                                             ],
+                                                                "title":  "PremiumRecipient"
+                                                            },
+                                       "StarsRecipient":  {
+                                                              "properties":  {
+                                                                                 "recipient":  {
+                                                                                                   "type":  "string",
+                                                                                                   "title":  "Recipient"
+                                                                                               },
+                                                                                 "photo":  {
+                                                                                               "anyOf":  [
+                                                                                                             {
+                                                                                                                 "type":  "string"
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "type":  "null"
+                                                                                                             }
+                                                                                                         ],
+                                                                                               "title":  "Photo"
+                                                                                           },
+                                                                                 "name":  {
+                                                                                              "type":  "string",
+                                                                                              "title":  "Name"
+                                                                                          }
+                                                                             },
+                                                              "type":  "object",
+                                                              "required":  [
+                                                                               "recipient",
+                                                                               "photo",
+                                                                               "name"
+                                                                           ],
+                                                              "title":  "StarsRecipient"
+                                                          },
+                                       "UserRead":  {
+                                                        "properties":  {
+                                                                           "first_name":  {
+                                                                                              "type":  "string",
+                                                                                              "title":  "First Name"
+                                                                                          },
+                                                                           "last_name":  {
+                                                                                             "anyOf":  [
+                                                                                                           {
+                                                                                                               "type":  "string"
+                                                                                                           },
+                                                                                                           {
+                                                                                                               "type":  "null"
+                                                                                                           }
+                                                                                                       ],
+                                                                                             "title":  "Last Name"
+                                                                                         },
+                                                                           "username":  {
+                                                                                            "anyOf":  [
+                                                                                                          {
+                                                                                                              "type":  "string"
+                                                                                                          },
+                                                                                                          {
+                                                                                                              "type":  "null"
+                                                                                                          }
+                                                                                                      ],
+                                                                                            "title":  "Username"
+                                                                                        },
+                                                                           "balance":  {
+                                                                                           "type":  "number",
+                                                                                           "title":  "Balance"
+                                                                                       }
+                                                                       },
+                                                        "type":  "object",
+                                                        "required":  [
+                                                                         "first_name",
+                                                                         "last_name",
+                                                                         "username",
+                                                                         "balance"
+                                                                     ],
+                                                        "title":  "UserRead"
+                                                    },
+                                       "ValidationError":  {
+                                                               "properties":  {
+                                                                                  "loc":  {
+                                                                                              "items":  {
+                                                                                                            "anyOf":  [
+                                                                                                                          {
+                                                                                                                              "type":  "string"
+                                                                                                                          },
+                                                                                                                          {
+                                                                                                                              "type":  "integer"
+                                                                                                                          }
+                                                                                                                      ]
+                                                                                                        },
+                                                                                              "type":  "array",
+                                                                                              "title":  "Location"
+                                                                                          },
+                                                                                  "msg":  {
+                                                                                              "type":  "string",
+                                                                                              "title":  "Message"
+                                                                                          },
+                                                                                  "type":  {
+                                                                                               "type":  "string",
+                                                                                               "title":  "Error Type"
+                                                                                           }
+                                                                              },
+                                                               "type":  "object",
+                                                               "required":  [
+                                                                                "loc",
+                                                                                "msg",
+                                                                                "type"
+                                                                            ],
+                                                               "title":  "ValidationError"
+                                                           }
+                                   },
+                       "securitySchemes":  {
+                                               "API Token":  {
+                                                                 "type":  "http",
+                                                                 "description":  "API Token from your panel",
+                                                                 "scheme":  "bearer"
+                                                             }
+                                           }
+                   },
+    "tags":  [
+                 {
+                     "name":  "private",
+                     "description":  "Endpoints that should appear in the schema only in development to generate our internal panel."
+                 },
+                 {
+                     "name":  "documented",
+                     "description":  "Endpoints shown and documented in the Fragment API documentation."
+                 }
+             ]
+}
