@@ -1,33 +1,62 @@
 ---
-title: 'Introduction'
-description: 'Example section for showcasing API endpoints'
+title: Basics
+description: This describes all the main ways to interact with our API
 ---
 
-<Note>
-  If you're not looking to build API reference documentation, you can delete
-  this section by removing the api-reference folder.
-</Note>
+<Accordion title="How to get an API token?">
+  You can get an API token in the [panel](https://panel.fragapi.ru)
 
-## Welcome
+  <img src="/images/api-keys.png" alt="Panel screenshot" className="rounded-xl" /> 
+</Accordion>
+<Accordion title="How to make requests?">
+  Requests are made to `https://fragapi.ru/v1/method-name`
 
-There are two ways to build API documentation: [OpenAPI](https://mintlify.com/docs/api-playground/openapi/setup) and [MDX components](https://mintlify.com/docs/api-playground/mdx/configuration). For the starter kit, we are using the following OpenAPI specification.
+  You must include the authorization header with your API key:
 
-<Card
-  title="Plant Store Endpoints"
-  icon="leaf"
-  href="https://github.com/mintlify/starter/blob/main/api-reference/openapi.json"
->
-  View the OpenAPI specification file
-</Card>
+    `Authorization`: `Bearer XXXYourApiKeyXXX`
+</Accordion>
 
-## Authentication
 
-All API endpoints are authenticated using Bearer tokens and picked up from the specification file.
+## API Usage Examples
 
-```json
-"security": [
-  {
-    "bearerAuth": []
+<CodeGroup>
+
+```python fragapi.py
+import requests
+
+BASE_URL = "https://fragapi.ru/v1"
+token = "<Your API key>"
+
+# Make a request to the API passing your API key
+r = requests.get(
+  url=f"{BASE_URL}/users/me",
+  headers={
+    "Authorization": f"Bearer {token}",
+    "Content-Type": "application/json"
   }
-]
+)
+me = r.json()
+
+# Should print data about balance, etc.
+print(me)
 ```
+
+```javascript fragapi.js
+const baseUrl = "https://fragapi.ru/v1"
+const token = "<Your API key>"
+
+// Make a request to the API passing your API key
+const response = await fetch(`${baseUrl}/users/me`, {
+  method: "GET",
+  headers: {
+    Authorization: `Bearer ${token}`,
+    "Content-Type": "application/json"
+  }
+})
+
+const me = await response.json()
+
+// Should print data about balance, etc.
+console.log(me)
+```
+</CodeGroup>

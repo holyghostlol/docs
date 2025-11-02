@@ -1,0 +1,100 @@
+---
+title: "Buy Premium"
+api: "POST http://localhost:8000/v1/premium/buy"
+description: "Purchase Telegram Premium subscription for a user"
+---
+
+Buy Telegram Premium subscription for a user by their username.
+
+### Headers
+
+<ParamField header="Authorization" type="string" required>
+  Bearer token with your API key
+</ParamField>
+
+### Body
+
+<ParamField body="username" type="string" required>
+  Telegram username of the recipient (without @)
+</ParamField>
+
+<ParamField body="months" type="string" required>
+  Duration of premium subscription. Options: `"3"`, `"6"`, or `"12"` months
+</ParamField>
+
+<ParamField body="show_sender" type="boolean" default="false">
+  Whether to show the sender's information to the recipient
+</ParamField>
+
+### Response
+
+<ResponseField name="success" type="boolean">
+  Whether the purchase was successful
+</ResponseField>
+
+<ResponseField name="transaction_hash" type="string">
+  TON blockchain transaction hash
+</ResponseField>
+
+<RequestExample>
+
+```bash cURL
+curl --request POST \
+  --url http://localhost:8000/v1/premium/buy \
+  --header 'Authorization: Bearer YOUR_API_KEY' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "username": "johndoe",
+    "months": "6",
+    "show_sender": false
+  }'
+```
+
+```python Python
+import requests
+
+url = "http://localhost:8000/v1/premium/buy"
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY",
+    "Content-Type": "application/json"
+}
+payload = {
+    "username": "johndoe",
+    "months": "6",
+    "show_sender": False
+}
+
+response = requests.post(url, headers=headers, json=payload)
+print(response.json())
+```
+
+```javascript JavaScript
+const response = await fetch('http://localhost:8000/v1/premium/buy', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer YOUR_API_KEY',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    username: 'johndoe',
+    months: '6',
+    show_sender: false
+  })
+});
+
+const data = await response.json();
+console.log(data);
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 200 Response
+{
+  "success": true,
+  "transaction_hash": "xyz789ghi012..."
+}
+```
+
+</ResponseExample>

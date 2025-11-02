@@ -1,0 +1,78 @@
+---
+title: "Get Premium Recipient"
+api: "GET http://localhost:8000/v1/premium/recipient/{username}"
+description: "Get information about a premium recipient"
+---
+
+Retrieve information about a Telegram user who can receive premium subscription.
+
+### Headers
+
+<ParamField header="Authorization" type="string" required>
+  Bearer token with your API key
+</ParamField>
+
+### Path Parameters
+
+<ParamField path="username" type="string" required>
+  Telegram username (without @)
+</ParamField>
+
+### Response
+
+<ResponseField name="recipient" type="string">
+  Recipient's identifier
+</ResponseField>
+
+<ResponseField name="photo" type="string">
+  URL to recipient's profile photo (nullable)
+</ResponseField>
+
+<ResponseField name="name" type="string">
+  Recipient's display name
+</ResponseField>
+
+<RequestExample>
+
+```bash cURL
+curl --request GET \
+  --url http://localhost:8000/v1/premium/recipient/johndoe \
+  --header 'Authorization: Bearer YOUR_API_KEY'
+```
+
+```python Python
+import requests
+
+username = "johndoe"
+url = f"http://localhost:8000/v1/premium/recipient/{username}"
+headers = {"Authorization": "Bearer YOUR_API_KEY"}
+
+response = requests.get(url, headers=headers)
+print(response.json())
+```
+
+```javascript JavaScript
+const username = 'johndoe';
+const response = await fetch(`http://localhost:8000/v1/premium/recipient/${username}`, {
+  headers: {
+    'Authorization': 'Bearer YOUR_API_KEY'
+  }
+});
+
+const data = await response.json();
+console.log(data);
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 200 Response
+{
+  "recipient": "johndoe",
+  "photo": "https://...",
+  "name": "John Doe"
+}
+```
+
+</ResponseExample>

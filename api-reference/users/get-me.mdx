@@ -1,0 +1,77 @@
+---
+title: "Get Current User"
+api: "GET http://localhost:8000/v1/users/me"
+description: "Get information about the authenticated API user"
+---
+
+Returns the current user's information including balance, name, and username.
+
+### Headers
+
+<ParamField header="Authorization" type="string" required>
+  Bearer token with your API key
+  
+  Example: `Bearer your_api_key_here`
+</ParamField>
+
+### Response
+
+<ResponseField name="first_name" type="string">
+  User's first name
+</ResponseField>
+
+<ResponseField name="last_name" type="string">
+  User's last name (nullable)
+</ResponseField>
+
+<ResponseField name="username" type="string">
+  User's Telegram username (nullable)
+</ResponseField>
+
+<ResponseField name="balance" type="number">
+  Current account balance in TON
+</ResponseField>
+
+<RequestExample>
+
+```bash cURL
+curl --request GET \
+  --url http://localhost:8000/v1/users/me \
+  --header 'Authorization: Bearer YOUR_API_KEY'
+```
+
+```python Python
+import requests
+
+url = "http://localhost:8000/v1/users/me"
+headers = {"Authorization": "Bearer YOUR_API_KEY"}
+
+response = requests.get(url, headers=headers)
+print(response.json())
+```
+
+```javascript JavaScript
+const response = await fetch('http://localhost:8000/v1/users/me', {
+  headers: {
+    'Authorization': 'Bearer YOUR_API_KEY'
+  }
+});
+
+const data = await response.json();
+console.log(data);
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json 200 Response
+{
+  "first_name": "John",
+  "last_name": "Doe",
+  "username": "johndoe",
+  "balance": 100.5
+}
+```
+
+</ResponseExample>
