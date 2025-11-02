@@ -7,7 +7,7 @@
     "baseUrl": "https://fragment-api.up.railway.app",
     "playground": {
       "mode": "interactive",
-      "proxy": true
+      "proxy": false
     }
   },
   "colors": {
