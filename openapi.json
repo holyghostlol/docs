@@ -8,8 +8,8 @@
   },
   "servers": [
     {
-      "url": "http://localhost:8000",
-      "description": "Development environment"
+      "url": "https://fragment-api.up.railway.app",
+      "description": "Production environment"
     }
   ],
   "paths": {
@@ -1038,3 +1038,4 @@
     }
   ]
 }
+

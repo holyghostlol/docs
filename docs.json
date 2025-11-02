@@ -4,7 +4,7 @@
   "name": "Fragment API",
   "openapi": ["/openapi.json"],
   "api": {
-    "baseUrl": "http://127.0.0.1:8000",
+    "baseUrl": "https://fragment-api.up.railway.app",
     "playground": {
       "mode": "simple"
     }
@@ -91,3 +91,4 @@
     }
   }
 }
+
